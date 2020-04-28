@@ -16,8 +16,8 @@
 			<td>${dto.id }</td><td><a href="modify?id=${dto.id }">${dto.name }</a></td>
 		</tr>
 		</c:forEach>
-		
-		<tr><td colspan="2"><a href="save_view">등록</a></td></tr>
+													     <!-- 추가 -->
+		<tr><td colspan="2"><a href="save_view">등록</a> 총 글: ${count } </td></tr>
 	</table>
 
 </body>

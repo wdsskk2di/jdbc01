@@ -41,12 +41,12 @@ public class JdbcDAO {
 	public ArrayList<JdbcDTO> list() {
 		String sql = "select * from test_jdbc order by id asc";
 		
-		//200428 두번째 추가
+		//200428 두번째 추가					        값을 여러개 가져올때 query (sql 구문, 그 결과)
 		ArrayList<JdbcDTO> list = (ArrayList<JdbcDTO>)template.query(sql, new BeanPropertyRowMapper<JdbcDTO>(JdbcDTO.class));
 		
 		return list;
 		
-		//또는				     값을 여러개 가져올때 query (sql 구문, 그 결과)
+		//또는
 		//return (ArrayList<JdbcDTO>)template.query(sql, new BeanPropertyRowMapper<JdbcDTO>(JdbcDTO.class));
 		//로도 표현 가능
 		
@@ -171,5 +171,11 @@ public class JdbcDAO {
 			e.printStackTrace();
 		}
 		*/
+	}
+	
+	//등록된 총 갯수
+	public int count() {
+		String sql = "select count(*) from test_jdbc";
+		return template.queryForObject(sql, Integer.class);
 	}
 }
