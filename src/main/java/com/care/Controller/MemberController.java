@@ -2,6 +2,8 @@ package com.care.Controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.context.support.GenericXmlApplicationContext;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,11 +14,20 @@ import com.care.service.JdbcModifySaveserviceImple;
 import com.care.service.JdbcModifyserviceImple;
 import com.care.service.JdbcSaveServiceImple;
 import com.care.service.JdbcService;
+import com.care.template.Constant;
 
 @Controller
 public class MemberController {
 	
 	private JdbcService jdbc;
+	
+	//200428 두번째 추가
+	public MemberController() {
+		String config = "classpath:applicationJDBC.xml";
+		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext(config);
+		JdbcTemplate template = ctx.getBean("template", JdbcTemplate.class);
+		Constant.template = template;
+	}	
 	
 	//목록보기
 	@RequestMapping("content")
