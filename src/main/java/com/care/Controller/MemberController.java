@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.care.service.JdbcContentServiceImple;
+import com.care.service.JdbcDeleteserviceImple;
 import com.care.service.JdbcModifySaveserviceImple;
 import com.care.service.JdbcModifyserviceImple;
 import com.care.service.JdbcSaveServiceImple;
@@ -56,6 +57,16 @@ public class MemberController {
 	public String modifySave(Model model, HttpServletRequest request) {
 		model.addAttribute("request", request);
 		jdbc = new JdbcModifySaveserviceImple();
+		jdbc.execute(model);
+		
+		return "redirect:content";
+	}
+	
+	//삭제
+	@RequestMapping("delete")
+	public String delete(Model model, HttpServletRequest request) {
+		model.addAttribute("request", request);
+		jdbc = new JdbcDeleteserviceImple();
 		jdbc.execute(model);
 		
 		return "redirect:content";

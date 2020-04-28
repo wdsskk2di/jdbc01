@@ -99,4 +99,19 @@ public class JdbcDAO {
 			e.printStackTrace();
 		}
 	}
+	
+	//삭제하기
+	public void delete(String id) {
+		String sql = "delete from test_jdbc where id=?";
+	
+		try {
+			con = DriverManager.getConnection(url, user, pwd);
+			ps = con.prepareStatement(sql);
+			ps.setString(1, id);
+			ps.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
