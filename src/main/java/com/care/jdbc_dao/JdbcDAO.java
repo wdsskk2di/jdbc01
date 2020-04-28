@@ -10,7 +10,7 @@ import com.care.jdbc_dto.JdbcDTO;
 
 public class JdbcDAO {
 	private String driver = "oracle.jdbc.driver.OracleDriver";
-	private String url = "jdbc:oracle:thin:@192.168.0.15:1521:xe";
+	private String url = "jdbc:oracle:thin:@192.168.0.27:1521:xe";
 	private String user="java", pwd="1234";
 	private Connection con;
 	private PreparedStatement ps;
@@ -42,5 +42,19 @@ public class JdbcDAO {
 		
 		return list;
 		
+	}
+	
+	public void save(String id, String name) {
+		String sql = "insert into test_jdbc(id, name) values(?,?)";
+		
+		try {
+			con = DriverManager.getConnection(url, user, pwd);
+			ps = con.prepareStatement(sql);
+			ps.setString(1, id);
+			ps.setString(2, name);
+			ps.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
