@@ -23,6 +23,7 @@ public class MemberController {
 	
 	//200428 두번째 추가
 	public MemberController() {
+		System.out.println("자동 실행");
 		String config = "classpath:applicationJDBC.xml";
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext(config);
 		JdbcTemplate template = ctx.getBean("template", JdbcTemplate.class);

@@ -4,9 +4,15 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementSetter;
+
 import com.care.jdbc_dto.JdbcDTO;
+import com.care.template.Constant;
 
 public class JdbcDAO {
 	private String driver = "oracle.jdbc.driver.OracleDriver";
@@ -16,7 +22,12 @@ public class JdbcDAO {
 	private PreparedStatement ps;
 	private ResultSet rs;
 	
+	private JdbcTemplate template;	//200428 두번째 추가
+	
 	public JdbcDAO() {
+		
+		this.template = Constant.template;	//200428 두번째 추가
+		
 		try {
 			Class.forName(driver);
 		} catch (ClassNotFoundException e) {
@@ -26,7 +37,18 @@ public class JdbcDAO {
 	
 	//목록보기
 	public ArrayList<JdbcDTO> list() {
-		String sql = "select * from test_jdbc";
+		String sql = "select * from test_jdbc order by id asc";
+		
+		//200428 두번째 추가
+		ArrayList<JdbcDTO> list = (ArrayList<JdbcDTO>)template.query(sql, new BeanPropertyRowMapper<JdbcDTO>(JdbcDTO.class));
+		
+		return list;
+		
+		//또는				     값을 여러개 가져올때 query (sql 구문, 그 결과)
+		//return (ArrayList<JdbcDTO>)template.query(sql, new BeanPropertyRowMapper<JdbcDTO>(JdbcDTO.class));
+		//로도 표현 가능
+		
+		/*
 		ArrayList<JdbcDTO> list = new ArrayList<JdbcDTO>();
 		try {
 			con = DriverManager.getConnection(url, user, pwd);
@@ -42,14 +64,28 @@ public class JdbcDAO {
 		} catch (Exception e) {	e.printStackTrace();}
 		
 		return list;
-		
+		*/
 	}
 	
 	
 	//저장하기
-	public void save(String id, String name) {
+	public void save(final String id, final String name) {	//이동하는 도중 값이 변동될 수 있으므로 이전 방식과 달리 final을 붙여야 한다
 		String sql = "insert into test_jdbc(id, name) values(?,?)";
 		
+		//200428 두번째 추가. sql이 완성된 쿼리문이면  template.update(sql); 한 줄로도 된다.
+		//그렇지 않다면..  ?값을 넣어줘야한다
+		template.update(sql, new PreparedStatementSetter() {
+			
+			@Override
+			public void setValues(PreparedStatement ps) throws SQLException {
+				ps.setString(1, id);
+				ps.setString(2, name);
+			}
+		});
+		
+		//람다식 표현은 ps->{ps.setString(1,id); ps.setString(2, name);} 다만 람다식은 버전이 안맞으면 사용 못함
+		
+		/*
 		try {
 			con = DriverManager.getConnection(url, user, pwd);
 			ps = con.prepareStatement(sql);
@@ -60,6 +96,7 @@ public class JdbcDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		*/
 	}
 	
 	//수정하기 전 수정하려는 id가 있는지 확인
