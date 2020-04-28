@@ -1,9 +1,9 @@
 package com.care.jdbc_dao;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+//import java.sql.Connection;
+//import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+//import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -15,24 +15,26 @@ import com.care.jdbc_dto.JdbcDTO;
 import com.care.template.Constant;
 
 public class JdbcDAO {
+	/*
 	private String driver = "oracle.jdbc.driver.OracleDriver";
 	private String url = "jdbc:oracle:thin:@192.168.0.27:1521:xe";
 	private String user="java", pwd="1234";
 	private Connection con;
 	private PreparedStatement ps;
 	private ResultSet rs;
-	
+	*/
 	private JdbcTemplate template;	//200428 두번째 추가
 	
 	public JdbcDAO() {
 		
 		this.template = Constant.template;	//200428 두번째 추가
-		
+		/*
 		try {
 			Class.forName(driver);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+		*/
 	}
 	
 	//목록보기
@@ -101,6 +103,13 @@ public class JdbcDAO {
 	
 	//수정하기 전 수정하려는 id가 있는지 확인
 	public JdbcDTO modify(String id) {
+		//200428 두번째 추가.
+		String sql = "select * from test_jdbc where id="+id;
+//		JdbcDTO dto = null;
+		return template.queryForObject(sql, new BeanPropertyRowMapper<JdbcDTO>(JdbcDTO.class));
+		//하나의 값을 가져올때 == queryForObject()
+		
+		/*
 		String sql = "select * from test_jdbc where id=?";
 		JdbcDTO dto = null;
 		
@@ -119,10 +128,16 @@ public class JdbcDAO {
 			e.printStackTrace();
 		}
 		return dto;
+		*/
 	}
 	
 	//수정하기
 	public void modifySave(String id, String name) {
+		//200428 두번째 추가.
+		String sql = "update test_jdbc set name='"+name+"' where id="+id;
+		template.update(sql);
+		
+		/*
 		String sql = "update test_jdbc set name=? where id=?";
 	
 		try {
@@ -135,12 +150,17 @@ public class JdbcDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		*/
 	}
 	
 	//삭제하기
 	public void delete(String id) {
-		String sql = "delete from test_jdbc where id=?";
-	
+		//200428 두번째 추가.
+		String sql = "delete from test_jdbc where id="+id;
+		template.update(sql);
+		
+		/*
+		String sql = "delete from test_jdbc where id=?";	
 		try {
 			con = DriverManager.getConnection(url, user, pwd);
 			ps = con.prepareStatement(sql);
@@ -150,5 +170,6 @@ public class JdbcDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		*/
 	}
 }
