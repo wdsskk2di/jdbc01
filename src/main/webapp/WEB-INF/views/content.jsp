@@ -13,7 +13,7 @@
 		
 		<c:forEach items="${list }" var="dto">
 		<tr>
-			<td>${dto.id }</td><td>${dto.name }</td>
+			<td>${dto.id }</td><td><a href="modify?id=${dto.id }">${dto.name }</a></td>
 		</tr>
 		</c:forEach>
 		
